@@ -1,0 +1,10 @@
+name: example
+description: A new Flutter package project.
+version: 0.0.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  dog:
+    path: ../

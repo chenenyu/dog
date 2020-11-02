@@ -1,0 +1,11 @@
+name: dog
+description: Dart log package, simple yet pretty.
+version: 0.1.0
+repository: https://github.com/chenenyu/dog
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  ansicolor: ^1.0.5
+  stack_trace: ^1.9.5
