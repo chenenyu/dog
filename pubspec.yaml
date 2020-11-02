@@ -1,7 +1,8 @@
 name: dog
-description: Dart log package, simple yet pretty.
+description: Dart log package, simple and pretty.
 version: 0.1.0
 repository: https://github.com/chenenyu/dog
+publish_to: https://pub.dev
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
