@@ -67,10 +67,11 @@ class Formatter {
 
     List<String> lines = [];
     lines.add(topBorder);
-    // level time caller
+    // tag/level time caller
     String caller = _getCaller();
-    lines.add(
-        '$verticalLine ${record.level.name} ${_fmtTime(record.dateTime)}${caller == null ? '' : (' (' + caller + ')')}');
+    lines.add('$verticalLine ${record.tag ?? record.level.name}'
+        ' ${_fmtTime(record.dateTime)}'
+        '${caller == null ? '' : (' (' + caller + ')')}');
     lines.add(middleBorder);
     // message
     for (String line in msg.split('\n')) {

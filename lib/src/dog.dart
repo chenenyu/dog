@@ -19,37 +19,39 @@ class Dog {
   final Emitter _emitter = Emitter();
 
   /// Default to [Level.DEBUG].
-  void call(dynamic message, {StackTrace stackTrace}) =>
-      d(message, stackTrace: stackTrace);
+  void call(dynamic message, {String tag, StackTrace stackTrace}) =>
+      d(message, tag: tag, stackTrace: stackTrace);
 
-  void v(dynamic message, {StackTrace stackTrace}) {
-    _log(Level.VERBOSE, message, stackTrace: stackTrace);
+  void v(dynamic message, {String tag, StackTrace stackTrace}) {
+    _log(Level.VERBOSE, message, tag: tag, stackTrace: stackTrace);
   }
 
-  void d(dynamic message, {StackTrace stackTrace}) {
-    _log(Level.DEBUG, message, stackTrace: stackTrace);
+  void d(dynamic message, {String tag, StackTrace stackTrace}) {
+    _log(Level.DEBUG, message, tag: tag, stackTrace: stackTrace);
   }
 
-  void i(dynamic message, {StackTrace stackTrace}) {
-    _log(Level.INFO, message, stackTrace: stackTrace);
+  void i(dynamic message, {String tag, StackTrace stackTrace}) {
+    _log(Level.INFO, message, tag: tag, stackTrace: stackTrace);
   }
 
-  void w(dynamic message, {StackTrace stackTrace}) {
-    _log(Level.WARNING, message, stackTrace: stackTrace);
+  void w(dynamic message, {String tag, StackTrace stackTrace}) {
+    _log(Level.WARNING, message, tag: tag, stackTrace: stackTrace);
   }
 
-  void e(dynamic message, {StackTrace stackTrace}) {
-    _log(Level.ERROR, message, stackTrace: stackTrace);
+  void e(dynamic message, {String tag, StackTrace stackTrace}) {
+    _log(Level.ERROR, message, tag: tag, stackTrace: stackTrace);
   }
 
-  void _log(Level level,
-      dynamic message, {
-        StackTrace stackTrace,
-      }) {
+  void _log(
+    Level level,
+    dynamic message, {
+    String tag,
+    StackTrace stackTrace,
+  }) {
     if (level < Dog.level) {
       return;
     }
-    Record record = Record(level, message, DateTime.now(), stackTrace);
+    Record record = Record(level, message, tag, DateTime.now(), stackTrace);
     List<String> lines = _formatter.format(record);
     _emitter.emit(level, lines);
   }
