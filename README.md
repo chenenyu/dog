@@ -53,3 +53,6 @@ try {
 ```
 ![](art/3.png)
 
+## Thanks
+
+[logger](https://github.com/orhanobut/logger): Simple, pretty and powerful logger for android.

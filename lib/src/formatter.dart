@@ -69,13 +69,8 @@ class Formatter {
     lines.add(topBorder);
     // level time caller
     String caller = _getCaller();
-    if (caller != null) {
-      lines.add(
-          '$verticalLine ${record.level.name} ${_fmtTime(record.dateTime)} ($caller)');
-    } else {
-      lines.add(
-          '$verticalLine ${record.level.name} ${_fmtTime(record.dateTime)}');
-    }
+    lines.add(
+        '$verticalLine ${record.level.name} ${_fmtTime(record.dateTime)}${caller == null ? '' : (' (' + caller + ')')}');
     lines.add(middleBorder);
     // message
     for (String line in msg.split('\n')) {

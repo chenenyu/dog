@@ -1,3 +1,7 @@
+import 'dart:io' as io;
+
+import 'package:ansicolor/ansicolor.dart';
+
 import 'emitter.dart';
 import 'formatter.dart';
 import 'level.dart';
@@ -7,7 +11,9 @@ import 'record.dart';
 class Dog {
   static Level level = Level.ALL;
 
-  Dog();
+  Dog() {
+    color_disabled = !io.stdout.supportsAnsiEscapes;
+  }
 
   final Formatter _formatter = Formatter();
   final Emitter _emitter = Emitter();
@@ -36,11 +42,10 @@ class Dog {
     _log(Level.ERROR, message, stackTrace: stackTrace);
   }
 
-  void _log(
-    Level level,
-    dynamic message, {
-    StackTrace stackTrace,
-  }) {
+  void _log(Level level,
+      dynamic message, {
+        StackTrace stackTrace,
+      }) {
     if (level < Dog.level) {
       return;
     }

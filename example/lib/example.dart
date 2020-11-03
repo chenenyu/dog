@@ -14,11 +14,12 @@ void main(List<String> args) {
     'c': 3
   });
   dog.w([1, 2, 3, 4, 5]);
-  dog(() => 'This this a message returned by a Function.');
 
   try {
     throw Exception('This is an exception.');
   } catch (e, st) {
     dog.e(e, stackTrace: st);
   }
+
+  dog(() => 'This this a message returned by a Function.');
 }
