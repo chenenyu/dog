@@ -51,7 +51,7 @@ class Dog {
     if (level < Dog.level) {
       return;
     }
-    Record record = Record(level, message, tag, DateTime.now(), stackTrace);
+    Record record = Record(level, message, DateTime.now(), tag, stackTrace);
     List<String> lines = _formatter.format(record);
     _emitter.emit(level, lines);
   }

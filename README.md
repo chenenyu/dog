@@ -1,6 +1,6 @@
 # Dog
 
-Dart log package, simple and pretty.
+Simple and pretty log package for Dart.
 
 ## Getting Started
 
@@ -55,4 +55,4 @@ try {
 
 ## Thanks
 
-[logger](https://github.com/orhanobut/logger): Simple, pretty and powerful logger for android.
+[logger](https://github.com/orhanobut/logger): Logger for android.
