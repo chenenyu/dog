@@ -1,22 +1,22 @@
-import 'dart:io' as io;
-
-import 'package:ansicolor/ansicolor.dart';
-
+import 'console_emitter.dart';
 import 'emitter.dart';
 import 'formatter.dart';
 import 'level.dart';
+import 'pretty_formatter.dart';
 import 'record.dart';
 
 /// Dart log.
 class Dog {
   static Level level = Level.ALL;
 
-  Dog() {
-    color_disabled = !io.stdout.supportsAnsiEscapes;
-  }
+  Dog({
+    Formatter formatter,
+    Emitter emitter,
+  })  : _formatter = formatter ?? PrettyFormatter(),
+        _emitter = emitter ?? ConsoleEmitter();
 
-  final Formatter _formatter = Formatter();
-  final Emitter _emitter = Emitter();
+  final Formatter _formatter;
+  final Emitter _emitter;
 
   /// Default to [Level.DEBUG].
   void call(dynamic message, {String tag, StackTrace stackTrace}) =>

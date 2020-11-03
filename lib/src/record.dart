@@ -4,8 +4,11 @@ import 'level.dart';
 class Record {
   final Level level;
   final dynamic message;
+  /// Optional. Defaults to level name.
   final String tag;
   final DateTime dateTime;
+
+  /// Optional.
   final StackTrace stackTrace;
 
   Record(
