@@ -82,6 +82,10 @@ class PrettyFormatter extends Formatter {
         ' ${fmtTime(record.dateTime)}'
         '${caller == null ? '' : (' (' + caller + ')')}');
     lines.add(middleBorder);
+    if (record.title != null) {
+      lines.add('$verticalLine ${record.title}');
+      lines.add(middleBorder);
+    }
     // message
     for (String line in msg.split('\n')) {
       while (line.length > lineLength - 2) {

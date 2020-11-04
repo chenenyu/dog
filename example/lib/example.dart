@@ -12,8 +12,10 @@ void main(List<String> args) {
     'b': {'b1': '2', 'b2': '2'},
     'c': 3
   });
-  dog.w([1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5],
-      tag: 'MyTag');
+  dog.w([1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 'a']);
+
+  dog.i({'success': true},
+      tag: 'HTTP', title: 'Response: https://api.example.com/test');
 
   try {
     throw Exception('This is an exception.');
