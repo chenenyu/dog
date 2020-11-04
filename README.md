@@ -1,5 +1,7 @@
 # Dog
 
+[![Pub Version](https://img.shields.io/pub/v/dog)](https://pub.dev/packages/dog)
+
 Simple and pretty log package for Dart.
 
 ## Getting Started
@@ -8,7 +10,7 @@ Simple and pretty log package for Dart.
 
 ```yaml
 dependencies:
-  dog: any
+  dog: any # replace 'any' with version number.
 ```
 
 ```dart
