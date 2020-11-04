@@ -5,6 +5,8 @@ import 'level.dart';
 import 'pretty_formatter.dart';
 import 'record.dart';
 
+final Dog dog = Dog();
+
 /// Dart log.
 ///
 /// [message] The message to output.

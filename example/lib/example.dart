@@ -15,7 +15,7 @@ void main(List<String> args) {
   dog.w([1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 'a']);
 
   dog.i({'success': true},
-      tag: 'HTTP', title: 'Response: https://api.example.com/test');
+      tag: 'HTTP', title: 'Response: https://api.example.com/');
 
   try {
     throw Exception('This is an exception.');
@@ -23,5 +23,5 @@ void main(List<String> args) {
     dog.e(e, stackTrace: st);
   }
 
-  dog(() => 'This this a message returned by a Function.');
+  dog(() => 'This this a message returned by Function.');
 }

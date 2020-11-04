@@ -13,8 +13,6 @@ dependencies:
 
 ```dart
 import 'package:dog/dog.dart';
-
-Dog dog = Dog();
 ```
 
 ### Usage
@@ -39,7 +37,7 @@ dog.i({
 // Iterable.
 dog.w([1, 2, 3, 4, 5]);
 // Function.
-dog(() => 'This this a message returned by a Function.');
+dog(() => 'This this a message returned by Function.');
 ```
 ![](art/2.png)
 
@@ -52,6 +50,12 @@ try {
 }
 ```
 ![](art/3.png)
+
+```dart
+// tag and title support
+dog.i({'success': true}, tag: 'HTTP', title: 'Response: https://api.example.com/');
+```
+![](art/4.png)
 
 ## Thanks
 
