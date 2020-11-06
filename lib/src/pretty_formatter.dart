@@ -88,15 +88,28 @@ class PrettyFormatter extends Formatter {
     }
     // message
     for (String line in msg.split('\n')) {
-      while (line.length > lineLength - 2) {
-        lines.add('$verticalLine ${line.substring(0, lineLength - 2)}');
-        line = line.substring(lineLength - 2);
+      if (line.length > lineLength - 2) {
+        RuneIterator iterator = line.runes.iterator;
+        int count = 0, p = 0;
+        while (iterator.moveNext()) {
+          count += iterator.currentSize;
+          if (count >= lineLength - 2) {
+            int end = iterator.rawIndex + iterator.currentSize;
+            lines.add('$verticalLine ${line.substring(p, end)}');
+            p = end;
+            count = 0;
+          }
+        }
+        if (p < line.length) {
+          lines.add('$verticalLine ${line.substring(p)}');
+        }
+      } else {
+        lines.add('$verticalLine $line');
       }
-      lines.add('$verticalLine $line');
     }
+    // stack trace
     if (st != null) {
       lines.add(middleBorder);
-      // stack trace
       for (String line in st.split('\n')) {
         lines.add('$verticalLine $line');
       }
