@@ -68,4 +68,8 @@ class Dog {
     List<String> lines = _formatter.format(record);
     _emitter.emit(record, lines);
   }
+
+  void destroy() {
+    _emitter.destroy();
+  }
 }
