@@ -1,3 +1,10 @@
+## [0.3.0] - 2020/11/10
+
+* Remove `final` modifier from the default `dog` instance.
+* Support custom StackTrace level.
+* Add `FileEmitter` to emit log to file.
+* Add `SimpleFormatter` to format log without borders.
+
 ## [0.2.0] - 2020/11/06
 
 * Handle runes in message.
