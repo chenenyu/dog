@@ -30,3 +30,5 @@
 .pub/
 pubspec.lock
 build/
+
+log.txt

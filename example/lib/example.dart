@@ -1,7 +1,11 @@
+
 import 'package:dog/dog.dart';
 
 void main(List<String> args) {
-  Dog dog = Dog();
+  Dog dog = Dog(
+      // formatter: SimpleFormatter(),
+      // emitter: FileEmitter(file: File('log.txt'), append: true),
+      );
   dog.v('verbose');
   dog.d('debug');
   dog.i('info');
