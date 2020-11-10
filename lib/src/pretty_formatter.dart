@@ -18,6 +18,7 @@ class PrettyFormatter extends Formatter {
   PrettyFormatter({
     this.maxPrettyLines = 20,
     this.lineLength = 120,
+    this.stackTraceLevel = 10,
   });
 
   /// If the pretty message lines exceed [maxPrettyLines],
@@ -26,6 +27,9 @@ class PrettyFormatter extends Formatter {
 
   /// Each message line length.
   final int lineLength;
+
+  /// The level we will retrieve from StackTrace.
+  final int stackTraceLevel;
 
   final JsonEncoder prettyJsonEncoder = JsonEncoder.withIndent('  ');
 
@@ -68,25 +72,26 @@ class PrettyFormatter extends Formatter {
 
   @override
   List<String> format(Record record) {
-    String msg = _convertMessage(record.message);
-    String st;
-    if (record.stackTrace != null) {
-      st = _convertStackTrace(record.stackTrace);
-    }
-
     List<String> lines = [];
+
     lines.add(topBorder);
+
     // tag/level time caller
     String caller = _getCaller();
     lines.add('$verticalLine ${record.tag ?? record.level.name}'
-        ' ${fmtTime(record.dateTime)}'
+        ' ${_fmtTime(record.dateTime)}'
         '${caller == null ? '' : (' (' + caller + ')')}');
+
     lines.add(middleBorder);
+
+    // title
     if (record.title != null) {
       lines.add('$verticalLine ${record.title}');
       lines.add(middleBorder);
     }
+
     // message
+    String msg = _convertMessage(record.message);
     for (String line in msg.split('\n')) {
       if (line.length > lineLength - 2) {
         RuneIterator iterator = line.runes.iterator;
@@ -107,13 +112,19 @@ class PrettyFormatter extends Formatter {
         lines.add('$verticalLine $line');
       }
     }
+
     // stack trace
+    String st;
+    if (record.stackTrace != null) {
+      st = _convertStackTrace(record.stackTrace);
+    }
     if (st != null) {
       lines.add(middleBorder);
       for (String line in st.split('\n')) {
         lines.add('$verticalLine $line');
       }
     }
+
     lines.add(bottomBorder);
 
     return lines;
@@ -140,12 +151,14 @@ class PrettyFormatter extends Formatter {
     return msg;
   }
 
-  /// 10 lines at most.
+  /// [stackTraceLevel] lines at most.
   String _convertStackTrace(StackTrace stackTrace) {
     String st = stackTrace.toString();
     List<String> lines = st.split('\n');
     int length = lines.length;
-    st = length <= 10 ? st : lines.sublist(0, min(length, 10)).join('\n');
+    st = length <= stackTraceLevel
+        ? st
+        : lines.sublist(0, min(length, stackTraceLevel)).join('\n');
     if (st.endsWith('\n')) {
       st = st.substring(0, st.length - 2); // rm the last empty line.
     }
@@ -153,7 +166,6 @@ class PrettyFormatter extends Formatter {
   }
 
   String _getCaller() {
-    // print(StackTrace.current);
     List<Frame> frames = Trace.current().frames;
     if (frames != null && frames.isNotEmpty) {
       for (int i = frames.length - 1; i >= 0; i--) {
@@ -163,5 +175,25 @@ class PrettyFormatter extends Formatter {
       }
     }
     return null;
+  }
+
+  /// Refer from [DateTime].
+  String _fmtTime(DateTime dateTime) {
+    String _threeDigits(int n) {
+      if (n >= 100) return '$n';
+      if (n >= 10) return '0$n';
+      return '00$n';
+    }
+
+    String _twoDigits(int n) {
+      if (n >= 10) return '$n';
+      return '0$n';
+    }
+
+    String h = _twoDigits(dateTime.hour);
+    String min = _twoDigits(dateTime.minute);
+    String sec = _twoDigits(dateTime.second);
+    String ms = _threeDigits(dateTime.millisecond);
+    return '$h:$min:$sec.$ms';
   }
 }

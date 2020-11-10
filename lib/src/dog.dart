@@ -5,7 +5,7 @@ import 'level.dart';
 import 'pretty_formatter.dart';
 import 'record.dart';
 
-final Dog dog = Dog();
+Dog dog = Dog();
 
 /// Dart log.
 ///
@@ -66,6 +66,6 @@ class Dog {
     Record record =
         Record(level, message, DateTime.now(), tag, title, stackTrace);
     List<String> lines = _formatter.format(record);
-    _emitter.emit(level, lines);
+    _emitter.emit(record, lines);
   }
 }

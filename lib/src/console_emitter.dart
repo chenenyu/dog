@@ -4,6 +4,7 @@ import 'package:ansicolor/ansicolor.dart';
 
 import 'emitter.dart';
 import 'level.dart';
+import 'record.dart';
 
 /// Print to console.
 class ConsoleEmitter extends Emitter {
@@ -21,10 +22,10 @@ class ConsoleEmitter extends Emitter {
 
   final AnsiPen pen = AnsiPen();
 
-  void emit(Level level, List<String> lines) {
+  void emit(Record record, List<String> lines) {
     pen.reset();
-    if (levelColors[level] != null) {
-      pen.xterm(levelColors[level]);
+    if (levelColors[record.level] != null) {
+      pen.xterm(levelColors[record.level]);
     }
     for (String line in lines) {
       print(pen(line));

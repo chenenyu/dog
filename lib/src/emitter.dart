@@ -1,6 +1,8 @@
-import 'level.dart';
+import 'record.dart';
 
 /// Emit log.
 abstract class Emitter {
-  void emit(Level level, List<String> lines);
+  void emit(Record record, List<String> lines);
+
+  void destroy() {}
 }
