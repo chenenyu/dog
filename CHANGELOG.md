@@ -1,3 +1,7 @@
+## [0.4.0] - 2020/11/12
+
+* Support custom caller info getter in `formatter`. This is useful when you wrap `dog` in other log class.
+
 ## [0.3.0] - 2020/11/10
 
 * Remove `final` modifier from the default `dog` instance.

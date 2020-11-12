@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:stack_trace/stack_trace.dart';
-
 import 'formatter.dart';
 import 'record.dart';
 
@@ -11,13 +9,19 @@ class SimpleFormatter extends Formatter {
   /// The level we will retrieve from StackTrace.
   final int stackTraceLevel;
 
-  SimpleFormatter({this.stackTraceLevel = 10});
+  /// Function to get caller info.
+  final StringCallback callerGetter;
+
+  SimpleFormatter({
+    this.stackTraceLevel = 10,
+    this.callerGetter = callerInfo,
+  });
 
   @override
   List<String> format(Record record) {
     List<String> lines = [];
     // time tag/level caller
-    String caller = _getCaller();
+    String caller = callerGetter == null ? null : callerGetter();
     lines.add('${record.dateTime.toIso8601String()}'
         ' ${record.tag ?? record.level.name}'
         '${caller == null ? '' : (' (' + caller + ')')}');
@@ -36,18 +40,6 @@ class SimpleFormatter extends Formatter {
     // Add a empty line to separate log. Don't use `\n`, it'll cause two empty lines.
     lines.add('');
     return lines;
-  }
-
-  String _getCaller() {
-    List<Frame> frames = Trace.current().frames;
-    if (frames != null && frames.isNotEmpty) {
-      for (int i = frames.length - 1; i >= 0; i--) {
-        if (frames[i].package == 'dog') {
-          return frames[i + 1].toString();
-        }
-      }
-    }
-    return null;
   }
 
   String _convertMessage(dynamic message) {

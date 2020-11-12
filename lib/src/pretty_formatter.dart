@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:stack_trace/stack_trace.dart';
-
 import 'formatter.dart';
 import 'record.dart';
 
@@ -19,6 +17,7 @@ class PrettyFormatter extends Formatter {
     this.maxPrettyLines = 20,
     this.lineLength = 120,
     this.stackTraceLevel = 10,
+    this.callerGetter = callerInfo,
   });
 
   /// If the pretty message lines exceed [maxPrettyLines],
@@ -30,6 +29,9 @@ class PrettyFormatter extends Formatter {
 
   /// The level we will retrieve from StackTrace.
   final int stackTraceLevel;
+
+  /// Function to get caller info.
+  final StringCallback callerGetter;
 
   final JsonEncoder prettyJsonEncoder = JsonEncoder.withIndent('  ');
 
@@ -77,7 +79,7 @@ class PrettyFormatter extends Formatter {
     lines.add(topBorder);
 
     // tag/level time caller
-    String caller = _getCaller();
+    String caller = callerGetter == null ? null : callerGetter();
     lines.add('$verticalLine ${record.tag ?? record.level.name}'
         ' ${_fmtTime(record.dateTime)}'
         '${caller == null ? '' : (' (' + caller + ')')}');
@@ -163,18 +165,6 @@ class PrettyFormatter extends Formatter {
       st = st.substring(0, st.length - 2); // rm the last empty line.
     }
     return st;
-  }
-
-  String _getCaller() {
-    List<Frame> frames = Trace.current().frames;
-    if (frames != null && frames.isNotEmpty) {
-      for (int i = frames.length - 1; i >= 0; i--) {
-        if (frames[i].package == 'dog') {
-          return frames[i + 1].toString();
-        }
-      }
-    }
-    return null;
   }
 
   /// Refer from [DateTime].

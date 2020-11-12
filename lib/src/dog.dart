@@ -20,11 +20,11 @@ class Dog {
   Dog({
     Formatter formatter,
     Emitter emitter,
-  })  : _formatter = formatter ?? PrettyFormatter(),
-        _emitter = emitter ?? ConsoleEmitter();
+  })  : this.formatter = formatter ?? PrettyFormatter(),
+        this.emitter = emitter ?? ConsoleEmitter();
 
-  final Formatter _formatter;
-  final Emitter _emitter;
+  final Formatter formatter;
+  final Emitter emitter;
 
   /// Default to [Level.DEBUG].
   void call(dynamic message,
@@ -65,11 +65,11 @@ class Dog {
     }
     Record record =
         Record(level, message, DateTime.now(), tag, title, stackTrace);
-    List<String> lines = _formatter.format(record);
-    _emitter.emit(record, lines);
+    List<String> lines = formatter.format(record);
+    emitter.emit(record, lines);
   }
 
   void destroy() {
-    _emitter.destroy();
+    emitter.destroy();
   }
 }
