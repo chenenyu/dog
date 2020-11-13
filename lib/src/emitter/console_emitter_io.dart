@@ -1,15 +1,15 @@
-import 'dart:io' as io;
+import 'dart:io';
 
 import 'package:ansicolor/ansicolor.dart';
 
-import 'emitter.dart';
-import 'level.dart';
-import 'record.dart';
+import '../emitter.dart';
+import '../level.dart';
+import '../record.dart';
 
 /// Print to console.
 class ConsoleEmitter extends Emitter {
   ConsoleEmitter() {
-    color_disabled = !io.stdout.supportsAnsiEscapes;
+    color_disabled = !stdout.supportsAnsiEscapes;
   }
 
   final Map levelColors = {

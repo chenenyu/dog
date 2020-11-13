@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'emitter.dart';
-import 'record.dart';
+import '../emitter.dart';
+import '../record.dart';
 
 /// Write log to file.
 class FileEmitter extends Emitter {

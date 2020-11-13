@@ -1,8 +1,8 @@
-import 'console_emitter.dart';
+import 'emitter/console_emitter.dart';
 import 'emitter.dart';
+import 'formatter/pretty_formatter.dart';
 import 'formatter.dart';
 import 'level.dart';
-import 'pretty_formatter.dart';
 import 'record.dart';
 
 Dog dog = Dog();

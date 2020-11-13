@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'formatter.dart';
-import 'record.dart';
+import '../formatter.dart';
+import '../record.dart';
 
 /// Format log message.
 class PrettyFormatter extends Formatter {

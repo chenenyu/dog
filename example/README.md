@@ -1,3 +1,3 @@
 # example
 
-Example project.
+`dart lib/example.dart`
