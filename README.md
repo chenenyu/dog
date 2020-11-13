@@ -74,11 +74,13 @@ Dog.level = Level.OFF;
 #### Formatter
 
 [`PrettyFormatter`](lib/src/formatter/pretty_formatter.dart): Convert message to pretty styles.
+
 [`SimpleFormatter`](lib/src/formatter/simple_formatter.dart): Format message without borders.
 
 #### Emitter
 
 [`ConsoleEmitter`](lib/src/emitter/console_formatter.dart): Output message to console.
+
 [`FileEmitter`](lib/src/emitter/file_formatter.dart): Output message to file, it doesn't support web platform.
 
 ## Thanks
