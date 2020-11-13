@@ -2,7 +2,7 @@
 
 [![Pub Version](https://img.shields.io/pub/v/dog)](https://pub.dev/packages/dog)
 
-Simple and pretty log package for Dart.
+Simple and pretty log package for Dart, includes Flutter and web.
 
 ## Getting Started
 
@@ -58,6 +58,28 @@ try {
 dog.i({'success': true}, tag: 'HTTP', title: 'Response: https://api.example.com/');
 ```
 ![](art/4.png)
+
+Web platform support:
+
+![chrome](art/chrome.png)
+
+#### Dog level
+
+See [Level](lib/src/level.dart).
+```dart
+// disable Dog
+Dog.level = Level.OFF;
+```
+
+#### Formatter
+
+[`PrettyFormatter`](lib/src/formatter/pretty_formatter.dart): Convert message to pretty styles.
+[`SimpleFormatter`](lib/src/formatter/simple_formatter.dart): Format message without borders.
+
+#### Emitter
+
+[`ConsoleEmitter`](lib/src/emitter/console_formatter.dart): Output message to console.
+[`FileEmitter`](lib/src/emitter/file_formatter.dart): Output message to file, it doesn't support web platform.
 
 ## Thanks
 
