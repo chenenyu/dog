@@ -1,3 +1,7 @@
+## [1.2.0] - 2020/11/16
+
+* Bug fix: handle `JsonUnsupportedObjectError` when convert message.
+
 ## [1.1.0] - 2020/11/16
 
 * Colorful VERBOSE/DEBUG message in browser console.
