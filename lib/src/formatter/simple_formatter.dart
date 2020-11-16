@@ -30,28 +30,33 @@ class SimpleFormatter extends Formatter {
       lines.add(record.title);
     }
     // message
-    String msg = _convertMessage(record.message);
+    String msg = convertMessage(record.message);
     lines.add(msg);
     // stack trace
     if (record.stackTrace != null) {
-      String st = _convertStackTrace(record.stackTrace);
+      String st = convertStackTrace(record.stackTrace);
       lines.add(st);
     }
     return lines;
   }
 
-  String _convertMessage(dynamic message) {
+  String convertMessage(dynamic message) {
     String msg;
     if (message is String) {
       msg = message;
     } else if (message is Map || message is Iterable) {
-      msg = jsonEncode(message);
+      try {
+        msg = jsonEncode(message);
+      } catch (e) {
+        // JsonUnsupportedObjectError
+        msg = message.toString();
+      }
     } else if (message is StringCallback) {
       msg = message().toString();
     } else if (message is Exception) {
       msg = message.toString();
     } else if (message is StackTrace) {
-      msg = _convertStackTrace(message);
+      msg = convertStackTrace(message);
     } else {
       msg = message.toString();
     }
@@ -59,7 +64,7 @@ class SimpleFormatter extends Formatter {
   }
 
   /// [stackTraceLevel] lines at most.
-  String _convertStackTrace(StackTrace stackTrace) {
+  String convertStackTrace(StackTrace stackTrace) {
     String st = stackTrace.toString();
     List<String> lines = st.split('\n');
     int length = lines.length;

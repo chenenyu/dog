@@ -93,7 +93,7 @@ class PrettyFormatter extends Formatter {
     }
 
     // message
-    String msg = _convertMessage(record.message);
+    String msg = convertMessage(record.message);
     for (String line in msg.split('\n')) {
       if (line.length > lineLength - 2) {
         RuneIterator iterator = line.runes.iterator;
@@ -118,7 +118,7 @@ class PrettyFormatter extends Formatter {
     // stack trace
     String st;
     if (record.stackTrace != null) {
-      st = _convertStackTrace(record.stackTrace);
+      st = convertStackTrace(record.stackTrace);
     }
     if (st != null) {
       lines.add(middleBorder);
@@ -132,21 +132,26 @@ class PrettyFormatter extends Formatter {
     return lines;
   }
 
-  String _convertMessage(dynamic message) {
+  String convertMessage(dynamic message) {
     String msg;
     if (message is String) {
       msg = message;
     } else if (message is Map || message is Iterable) {
-      msg = prettyJsonEncoder.convert(message);
-      if (msg.split('\n').length > maxPrettyLines) {
-        msg = jsonEncode(message);
+      try {
+        msg = prettyJsonEncoder.convert(message);
+        if (msg.split('\n').length > maxPrettyLines) {
+          msg = jsonEncode(message);
+        }
+      } catch (e) {
+        // JsonUnsupportedObjectError
+        msg = message.toString();
       }
     } else if (message is StringCallback) {
       msg = message().toString();
     } else if (message is Exception) {
       msg = message.toString();
     } else if (message is StackTrace) {
-      msg = _convertStackTrace(message);
+      msg = convertStackTrace(message);
     } else {
       msg = message.toString();
     }
@@ -154,7 +159,7 @@ class PrettyFormatter extends Formatter {
   }
 
   /// [stackTraceLevel] lines at most.
-  String _convertStackTrace(StackTrace stackTrace) {
+  String convertStackTrace(StackTrace stackTrace) {
     String st = stackTrace.toString();
     List<String> lines = st.split('\n');
     int length = lines.length;
