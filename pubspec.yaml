@@ -1,6 +1,6 @@
 name: dog
 description: Simple and pretty log package for Dart, includes Flutter and web.
-version: 1.0.0
+version: 1.1.0
 repository: https://github.com/chenenyu/dog
 publish_to: https://pub.dev
 

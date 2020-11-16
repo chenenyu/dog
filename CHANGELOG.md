@@ -1,3 +1,7 @@
+## [1.1.0] - 2020/11/16
+
+* Colorful VERBOSE/DEBUG message in browser console.
+
 ## [1.0.0] - 2020/11/13
 
 * Support web platform.

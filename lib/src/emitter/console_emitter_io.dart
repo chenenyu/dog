@@ -22,6 +22,7 @@ class ConsoleEmitter extends Emitter {
 
   final AnsiPen pen = AnsiPen();
 
+  @override
   void emit(Record record, List<String> lines) {
     pen.reset();
     if (levelColors[record.level] != null) {
