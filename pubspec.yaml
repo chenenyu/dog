@@ -10,3 +10,8 @@ environment:
 dependencies:
   ansicolor: ^1.0.5
   stack_trace: ^1.9.5
+  tuple: ^1.0.3
+
+dev_dependencies:
+  http: ^0.12.2
+  path: ^1.7.0
