@@ -1,3 +1,8 @@
+## [1.3.0] - 2020/11/20
+
+* Add script to download and parse unicode data.
+* Use unicode codepoint to determine message line width.
+
 ## [1.2.0] - 2020/11/16
 
 * Bug fix: handle `JsonUnsupportedObjectError` when convert message.
