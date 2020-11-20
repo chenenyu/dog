@@ -3,6 +3,7 @@ import 'dart:math';
 
 import '../formatter.dart';
 import '../record.dart';
+import '../util/char_width.dart';
 
 /// Format log message.
 class PrettyFormatter extends Formatter {
@@ -93,18 +94,23 @@ class PrettyFormatter extends Formatter {
     }
 
     // message
+    final int maxWidth = lineLength - 2;
     String msg = convertMessage(record.message);
     for (String line in msg.split('\n')) {
-      if (line.length > lineLength - 2) {
+      if (line.length > maxWidth ~/ 2) {
         RuneIterator iterator = line.runes.iterator;
-        int count = 0, p = 0;
+        int widths = 0, p = 0;
         while (iterator.moveNext()) {
-          count += iterator.currentSize;
-          if (count >= lineLength - 2) {
+          int width = char_width(iterator.current);
+          widths += width;
+          if (widths >= maxWidth) {
+            if (widths > maxWidth) {
+              iterator.movePrevious();
+            }
             int end = iterator.rawIndex + iterator.currentSize;
             lines.add('$verticalLine ${line.substring(p, end)}');
             p = end;
-            count = 0;
+            widths = 0;
           }
         }
         if (p < line.length) {
