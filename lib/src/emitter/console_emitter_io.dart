@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:ansicolor/ansicolor.dart';
 
 import '../emitter.dart';
@@ -8,10 +6,6 @@ import '../record.dart';
 
 /// Print to console.
 class ConsoleEmitter extends Emitter {
-  ConsoleEmitter() {
-    color_disabled = !stdout.supportsAnsiEscapes;
-  }
-
   final Map levelColors = {
     Level.VERBOSE: 008, // gray
     Level.DEBUG: 006, // cyan

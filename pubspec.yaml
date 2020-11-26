@@ -8,7 +8,7 @@ environment:
   sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
-  ansicolor: ^1.0.5
+  ansicolor: ^1.1.0
   stack_trace: ^1.9.5
   tuple: ^1.0.3
 
