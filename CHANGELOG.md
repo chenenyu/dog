@@ -1,3 +1,8 @@
+## [1.3.1] - 2020/11/26
+
+* Upgrade `ansicolor` version to auto detect whether ANSI is supported.
+* Remove `call` method.
+
 ## [1.3.0] - 2020/11/20
 
 * Add script to download and parse unicode data.
