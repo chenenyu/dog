@@ -28,5 +28,5 @@ void main(List<String> args) {
     dog.e(e, stackTrace: st);
   }
 
-  dog(() => 'This this a message returned by Function.');
+  dog.d(() => 'This this a message returned by Function.');
 }

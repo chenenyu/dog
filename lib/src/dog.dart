@@ -26,10 +26,10 @@ class Dog {
   final Formatter formatter;
   final Emitter emitter;
 
-  /// Default to [Level.DEBUG].
-  void call(dynamic message,
-          {String tag, String title, StackTrace stackTrace}) =>
-      d(message, tag: tag, stackTrace: stackTrace);
+  // /// Default to [Level.DEBUG].
+  // void call(dynamic message,
+  //         {String tag, String title, StackTrace stackTrace}) =>
+  //     d(message, tag: tag, stackTrace: stackTrace);
 
   void v(dynamic message, {String tag, String title, StackTrace stackTrace}) {
     _log(Level.VERBOSE, message,
