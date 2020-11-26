@@ -39,7 +39,7 @@ dog.i({
 // Iterable.
 dog.w([1, 2, 3, 4, 5]);
 // Function.
-dog(() => 'This this a message returned by Function.');
+dog.d(() => 'This this a message returned by Function.');
 ```
 ![](art/2.png)
 
