@@ -83,6 +83,13 @@ Dog.level = Level.OFF;
 
 [`FileEmitter`](lib/src/emitter/file_formatter.dart): Output message to file, it doesn't support web platform.
 
+## Note
+
+If you are running a flutter app by **AndroidStudio** and the console log is not colorful, then try to enable it manually:  
+```dart
+dog = Dog(emitter: ConsoleEmitter(supportsAnsiColor: true));
+```
+
 ## Thanks
 
 [logger](https://github.com/orhanobut/logger): Logger for android.

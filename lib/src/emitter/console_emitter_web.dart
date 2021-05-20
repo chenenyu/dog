@@ -7,6 +7,8 @@ import '../record.dart';
 
 /// Print to browser console.
 class ConsoleEmitter extends Emitter {
+  ConsoleEmitter({bool supportsAnsiColor});
+
   @override
   void emit(Record record, List<String> lines) {
     String output = lines.join('\n');

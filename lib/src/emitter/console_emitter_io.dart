@@ -16,6 +16,12 @@ class ConsoleEmitter extends Emitter {
 
   final AnsiPen pen = AnsiPen();
 
+  ConsoleEmitter({bool supportsAnsiColor}) {
+    if (supportsAnsiColor != null) {
+      ansiColorDisabled = !supportsAnsiColor;
+    }
+  }
+
   @override
   void emit(Record record, List<String> lines) {
     pen.reset();

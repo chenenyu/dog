@@ -1,3 +1,7 @@
+## [1.3.2] - 2021/05/20
+
+* Add constructor parameter `supportsAnsiColor` for `ConsoleEmitter`.
+
 ## [1.3.1] - 2020/11/26
 
 * Upgrade `ansicolor` version to auto detect whether ANSI is supported.
