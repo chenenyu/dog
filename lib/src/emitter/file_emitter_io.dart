@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import '../emitter.dart';
-import '../record.dart';
+import 'package:dog/src/emitter.dart';
+import 'package:dog/src/record.dart';
 
 /// Write log to file.
 class FileEmitter extends Emitter {
@@ -11,19 +11,21 @@ class FileEmitter extends Emitter {
   /// [FileMode.writeOnlyAppend] or [FileMode.writeOnly].
   final bool append;
 
-  IOSink _ioSink;
+  IOSink? _ioSink;
 
   FileEmitter({
-    this.file,
-    this.append,
-  }) : assert(file != null) {
+    required this.file,
+    this.append = true,
+  }) {
     _ioSink = file.openWrite(
-        mode: append ?? true ? FileMode.writeOnlyAppend : FileMode.writeOnly);
+        mode: append ? FileMode.writeOnlyAppend : FileMode.writeOnly);
   }
 
   @override
   void emit(Record record, List<String> lines) {
-    lines.forEach(_ioSink?.writeln);
+    for (String line in lines) {
+      _ioSink?.writeln(line);
+    }
   }
 
   @override

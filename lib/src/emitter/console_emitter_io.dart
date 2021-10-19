@@ -1,22 +1,21 @@
 import 'package:ansicolor/ansicolor.dart';
-
-import '../emitter.dart';
-import '../level.dart';
-import '../record.dart';
+import 'package:dog/src/emitter.dart';
+import 'package:dog/src/level.dart';
+import 'package:dog/src/record.dart';
 
 /// Print to console.
 class ConsoleEmitter extends Emitter {
   final Map levelColors = {
-    Level.VERBOSE: 008, // gray
-    Level.DEBUG: 006, // cyan
-    Level.INFO: 007, // white
-    Level.WARNING: 003, // yellow
-    Level.ERROR: 001, // red
+    Level.verbose: 008, // gray
+    Level.debug: 006, // cyan
+    Level.info: 007, // white
+    Level.warning: 003, // yellow
+    Level.error: 001, // red
   };
 
   final AnsiPen pen = AnsiPen();
 
-  ConsoleEmitter({bool supportsAnsiColor}) {
+  ConsoleEmitter({bool? supportsAnsiColor}) {
     if (supportsAnsiColor != null) {
       ansiColorDisabled = !supportsAnsiColor;
     }

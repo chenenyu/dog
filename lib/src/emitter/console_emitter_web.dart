@@ -1,27 +1,27 @@
 import 'dart:html';
 import 'dart:js';
 
-import '../emitter.dart';
-import '../level.dart';
-import '../record.dart';
+import 'package:dog/src/emitter.dart';
+import 'package:dog/src/level.dart';
+import 'package:dog/src/record.dart';
 
 /// Print to browser console.
 class ConsoleEmitter extends Emitter {
-  ConsoleEmitter({bool supportsAnsiColor});
+  ConsoleEmitter({bool? supportsAnsiColor});
 
   @override
   void emit(Record record, List<String> lines) {
     String output = lines.join('\n');
-    if (record.level == Level.VERBOSE) {
+    if (record.level == Level.verbose) {
       jsConsole('debug', ['%c$output', 'color:grey']);
-    } else if (record.level == Level.DEBUG) {
+    } else if (record.level == Level.debug) {
       jsConsole('debug', ['%c$output', 'color:#00758F']); // MosaicBlue
-    } else if (record.level == Level.INFO) {
+    } else if (record.level == Level.info) {
       window.console.info(output);
-    } else if (record.level == Level.WARNING) {
+    } else if (record.level == Level.warning) {
       output = '\n' + output; // chrome
       window.console.warn(output);
-    } else if (record.level == Level.ERROR) {
+    } else if (record.level == Level.error) {
       output = '\n' + output; // chrome
       window.console.error(output);
     } else {
@@ -29,9 +29,9 @@ class ConsoleEmitter extends Emitter {
     }
   }
 
-  void jsConsole(String method, [List args]) {
+  void jsConsole(String method, [List? args]) {
     JsObject console = JsObject.fromBrowserObject(context['console']);
-    if (console != null && console.hasProperty(method)) {
+    if (console.hasProperty(method)) {
       console.callMethod(method, args);
     }
   }

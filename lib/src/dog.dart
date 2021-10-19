@@ -1,11 +1,12 @@
-import 'emitter/console_emitter.dart';
-import 'emitter.dart';
-import 'formatter/pretty_formatter.dart';
-import 'formatter.dart';
-import 'level.dart';
-import 'record.dart';
+import 'package:dog/src/dispatcher.dart';
+import 'package:dog/src/emitter/console_emitter.dart';
+import 'package:dog/src/formatter/pretty_formatter.dart';
+import 'package:dog/src/handler.dart';
+import 'package:dog/src/level.dart';
+import 'package:dog/src/record.dart';
 
-Dog dog = Dog();
+Dog dog = Dog(
+    handler: Handler(formatter: PrettyFormatter(), emitter: ConsoleEmitter()));
 
 /// Dart log.
 ///
@@ -14,62 +15,68 @@ Dog dog = Dog();
 /// [title] Optional. Line shows above [message].
 /// [stackTrace] Optional. StackTrace shows below [message].
 class Dog {
-  /// Specify [level] to [Level.OFF] to disable all output.
-  static Level level = Level.ALL;
+  /// Specify [level] to [Level.off] to disable all output.
+  static Level level = Level.all;
 
-  Dog({
-    Formatter formatter,
-    Emitter emitter,
-  })  : this.formatter = formatter ?? PrettyFormatter(),
-        this.emitter = emitter ?? ConsoleEmitter();
+  final Dispatcher _dispatcher = Dispatcher();
 
-  final Formatter formatter;
-  final Emitter emitter;
+  Dog({Handler? handler}) {
+    if (handler != null) {
+      _dispatcher.registerHandler(handler);
+    }
+  }
 
-  // /// Default to [Level.DEBUG].
-  // void call(dynamic message,
-  //         {String tag, String title, StackTrace stackTrace}) =>
-  //     d(message, tag: tag, stackTrace: stackTrace);
-
-  void v(dynamic message, {String tag, String title, StackTrace stackTrace}) {
-    _log(Level.VERBOSE, message,
+  void v(dynamic message,
+      {String? tag, String? title, StackTrace? stackTrace}) {
+    _log(Level.verbose, message,
         tag: tag, title: title, stackTrace: stackTrace);
   }
 
-  void d(dynamic message, {String tag, String title, StackTrace stackTrace}) {
-    _log(Level.DEBUG, message, tag: tag, title: title, stackTrace: stackTrace);
+  void d(dynamic message,
+      {String? tag, String? title, StackTrace? stackTrace}) {
+    _log(Level.debug, message, tag: tag, title: title, stackTrace: stackTrace);
   }
 
-  void i(dynamic message, {String tag, String title, StackTrace stackTrace}) {
-    _log(Level.INFO, message, tag: tag, title: title, stackTrace: stackTrace);
+  void i(dynamic message,
+      {String? tag, String? title, StackTrace? stackTrace}) {
+    _log(Level.info, message, tag: tag, title: title, stackTrace: stackTrace);
   }
 
-  void w(dynamic message, {String tag, String title, StackTrace stackTrace}) {
-    _log(Level.WARNING, message,
+  void w(dynamic message,
+      {String? tag, String? title, StackTrace? stackTrace}) {
+    _log(Level.warning, message,
         tag: tag, title: title, stackTrace: stackTrace);
   }
 
-  void e(dynamic message, {String tag, String title, StackTrace stackTrace}) {
-    _log(Level.ERROR, message, tag: tag, title: title, stackTrace: stackTrace);
+  void e(dynamic message,
+      {String? tag, String? title, StackTrace? stackTrace}) {
+    _log(Level.error, message, tag: tag, title: title, stackTrace: stackTrace);
   }
 
   void _log(
     Level level,
     dynamic message, {
-    String tag,
-    String title,
-    StackTrace stackTrace,
+    String? tag,
+    String? title,
+    StackTrace? stackTrace,
   }) {
     if (level < Dog.level) {
       return;
     }
     Record record =
         Record(level, message, DateTime.now(), tag, title, stackTrace);
-    List<String> lines = formatter.format(record);
-    emitter.emit(record, lines);
+    _dispatcher.add(record);
+  }
+
+  void registerHandler(Handler handler) {
+    _dispatcher.registerHandler(handler);
+  }
+
+  void unregisterHandler(Handler handler) {
+    _dispatcher.unregisterHandler(handler);
   }
 
   void destroy() {
-    emitter.destroy();
+    _dispatcher.destroy();
   }
 }

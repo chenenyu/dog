@@ -3,12 +3,8 @@ import 'dart:html';
 import 'package:dog/dog.dart';
 
 void main() {
-  querySelector('#output').text = 'Open your browser console ❤️.';
+  querySelector('#output')?.text = 'Open your browser console ❤️.';
 
-  dog = Dog(
-      // formatter: PrettyFormatter(lineLength: 100),
-      // formatter: SimpleFormatter(),
-      );
   dog.v('verbose');
   dog.d('debug');
   dog.i('info');

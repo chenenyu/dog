@@ -15,7 +15,7 @@ const String UNICODE_DATA_URL =
 const String EAST_ASIAN_WIDTH_URL =
     'http://ftp.unicode.org/Public/UNIDATA/EastAsianWidth.txt';
 const String EMOJI_DATA_URL =
-    'https://unicode.org/Public/emoji/12.1/emoji-data.txt';
+    'https://unicode.org/Public/14.0.0/ucd/emoji/emoji-data.txt';
 
 // Maximum codepoint value.
 const int MAX_CODEPOINT = 0x110000;
@@ -39,7 +39,7 @@ const int WIDTH_WIDENED_IN_9 = -6;
 class CodePoint {
   final int codepoint;
   String category = CAT_UNASSIGNED;
-  int width;
+  int? width;
 
   CodePoint(this.codepoint);
 
@@ -78,7 +78,7 @@ Future<List<String>> _read_datafile(String url) async {
   File file = File(p.join(p.dirname(Platform.script.path), name));
   if (!file.existsSync()) {
     print('${DateTime.now().toString()}: Loading $url');
-    String contents = await http.read(url);
+    String contents = await http.read(Uri.parse(url));
     await file.writeAsString(contents, flush: true);
     print('${DateTime.now().toString()}: Write to ${file.path}');
   }
@@ -173,9 +173,9 @@ void _set_emoji_data(List<String> emoji_data_lines, List<CodePoint> cps) {
     assert(cp_prop.length == 2, '${cp_prop}.length != 2');
     String cp_range = cp_prop.first.trim();
     double version = 0;
-    RegExpMatch match = reg.firstMatch(comments);
+    RegExpMatch? match = reg.firstMatch(comments);
     assert(match != null);
-    version = double.parse(match[1]);
+    version = double.parse(match![1]!);
     List<int> range = _hexrange_to_range(cp_range);
     return range.map((e) => Tuple2<int, double>(e, version));
   }
@@ -216,7 +216,7 @@ void _set_hardcoded_ranges(List<CodePoint> cps) {
     Tuple2(0xF0000, 0xFFFFD),
     Tuple2(0x100000, 0x10FFFD),
   ];
-  for (Tuple2 tuple in private_ranges) {
+  for (Tuple2<int, int> tuple in private_ranges) {
     List<int> range = _tuple_to_range(tuple);
     for (int cp in range) {
       cps[cp].category = CAT_PRIVATE_USE;
@@ -233,7 +233,7 @@ void _set_hardcoded_ranges(List<CodePoint> cps) {
     Tuple2(0xD800, 0xDBFF),
     Tuple2(0xDC00, 0xDFFF),
   ];
-  for (Tuple2 tuple in surrogate_ranges) {
+  for (Tuple2<int, int> tuple in surrogate_ranges) {
     List<int> range = _tuple_to_range(tuple);
     for (int cp in range) {
       cps[cp].category = CAT_SURROGATE;

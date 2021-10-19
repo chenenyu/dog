@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
 
-import '../formatter.dart';
-import '../record.dart';
-import '../util/char_width.dart';
+import 'package:dog/src/formatter.dart';
+import 'package:dog/src/record.dart';
+import 'package:dog/src/util/char_width.dart';
+import 'package:dog/src/util/utils.dart';
 
 /// Format log message.
 class PrettyFormatter extends Formatter {
@@ -18,7 +19,7 @@ class PrettyFormatter extends Formatter {
     this.maxPrettyLines = 20,
     this.lineLength = 120,
     this.stackTraceLevel = 10,
-    this.callerGetter = callerInfo,
+    this.callerGetter = DogUtils.defaultCallerInfo,
   });
 
   /// If the pretty message lines exceed [maxPrettyLines],
@@ -32,45 +33,45 @@ class PrettyFormatter extends Formatter {
   final int stackTraceLevel;
 
   /// Function to get caller info.
-  final StringCallback callerGetter;
+  final MessageCallback? callerGetter;
 
   final JsonEncoder prettyJsonEncoder = JsonEncoder.withIndent('  ');
 
-  String _topBorder;
-  String _middleBorder;
-  String _bottomBorder;
+  String? _topBorder;
+  String? _middleBorder;
+  String? _bottomBorder;
 
   /// ┌───────────
   String get topBorder {
     if (_topBorder == null) {
-      List<String> l = List(lineLength);
-      l[0] = topLeftCorner;
-      l.fillRange(1, lineLength, solidDivider);
+      List<String> l = List.generate(
+          lineLength, (index) => index == 0 ? topLeftCorner : solidDivider,
+          growable: false);
       _topBorder = l.join();
     }
-    return _topBorder;
+    return _topBorder!;
   }
 
   /// ├┄┄┄┄┄┄┄┄┄┄┄
   String get middleBorder {
     if (_middleBorder == null) {
-      List<String> l = List(lineLength);
-      l[0] = middleCorner;
-      l.fillRange(1, lineLength, dottedDivider);
+      List<String> l = List.generate(
+          lineLength, (index) => index == 0 ? middleCorner : dottedDivider,
+          growable: false);
       _middleBorder = l.join();
     }
-    return _middleBorder;
+    return _middleBorder!;
   }
 
   /// └───────────
   String get bottomBorder {
     if (_bottomBorder == null) {
-      List<String> l = List(lineLength);
-      l[0] = bottomLeftCorner;
-      l.fillRange(1, lineLength, solidDivider);
+      List<String> l = List.generate(
+          lineLength, (index) => index == 0 ? bottomLeftCorner : solidDivider,
+          growable: false);
       _bottomBorder = l.join();
     }
-    return _bottomBorder;
+    return _bottomBorder!;
   }
 
   @override
@@ -80,9 +81,9 @@ class PrettyFormatter extends Formatter {
     lines.add(topBorder);
 
     // tag/level time caller
-    String caller = callerGetter == null ? null : callerGetter();
+    String? caller = callerGetter?.call().toString();
     lines.add('$verticalLine ${record.tag ?? record.level.name}'
-        ' ${_fmtTime(record.dateTime)}'
+        ' ${DogUtils.fmtTime(record.dateTime)}'
         '${caller == null ? '' : (' (' + caller + ')')}');
 
     lines.add(middleBorder);
@@ -101,7 +102,7 @@ class PrettyFormatter extends Formatter {
         RuneIterator iterator = line.runes.iterator;
         int widths = 0, p = 0;
         while (iterator.moveNext()) {
-          int width = char_width(iterator.current);
+          int width = charWidth(iterator.current);
           widths += width;
           if (widths >= maxWidth) {
             if (widths > maxWidth) {
@@ -122,9 +123,9 @@ class PrettyFormatter extends Formatter {
     }
 
     // stack trace
-    String st;
+    String? st;
     if (record.stackTrace != null) {
-      st = convertStackTrace(record.stackTrace);
+      st = convertStackTrace(record.stackTrace!);
     }
     if (st != null) {
       lines.add(middleBorder);
@@ -152,7 +153,7 @@ class PrettyFormatter extends Formatter {
         // JsonUnsupportedObjectError
         msg = message.toString();
       }
-    } else if (message is StringCallback) {
+    } else if (message is MessageCallback) {
       msg = message().toString();
     } else if (message is Exception) {
       msg = message.toString();
@@ -176,25 +177,5 @@ class PrettyFormatter extends Formatter {
       st = st.substring(0, st.length - 2); // rm the last empty line.
     }
     return st;
-  }
-
-  /// Refer from [DateTime].
-  String _fmtTime(DateTime dateTime) {
-    String _threeDigits(int n) {
-      if (n >= 100) return '$n';
-      if (n >= 10) return '0$n';
-      return '00$n';
-    }
-
-    String _twoDigits(int n) {
-      if (n >= 10) return '$n';
-      return '0$n';
-    }
-
-    String h = _twoDigits(dateTime.hour);
-    String min = _twoDigits(dateTime.minute);
-    String sec = _twoDigits(dateTime.second);
-    String ms = _threeDigits(dateTime.millisecond);
-    return '$h:$min:$sec.$ms';
   }
 }

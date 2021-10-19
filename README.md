@@ -87,7 +87,7 @@ Dog.level = Level.OFF;
 
 If you are running a flutter app by **AndroidStudio** and the console log is not colorful, then try to enable it manually:  
 ```dart
-dog = Dog(emitter: ConsoleEmitter(supportsAnsiColor: true));
+dog = Dog(handler: Handler(formatter: PrettyFormatter(), emitter: ConsoleEmitter(supportsAnsiColor: true)));
 ```
 
 ## Thanks

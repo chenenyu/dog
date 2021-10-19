@@ -1,5 +1,5 @@
-import '../emitter.dart';
-import '../record.dart';
+import 'package:dog/src/emitter.dart';
+import 'package:dog/src/record.dart';
 
 /// Unsupported
 class FileEmitter extends Emitter {
@@ -8,7 +8,7 @@ class FileEmitter extends Emitter {
 
   FileEmitter({
     this.file,
-    this.append,
+    this.append = true,
   }) {
     throw UnsupportedError('FileEmitter does not support web platform.');
   }

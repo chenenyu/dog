@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:dog/dog.dart';
 
 void main(List<String> args) {
-  Dog dog = Dog(
-    // formatter: SimpleFormatter(),
-    emitter: FileEmitter(file: File('log.txt'), append: false),
-  );
+  // dog = Dog(
+  //   handler: Handler(
+  //     formatter: SimpleFormatter(),
+  //     emitter: FileEmitter(file: File('log.txt'), append: false),
+  //   ),
+  // );
   dog.v('verbose');
   dog.d('debug');
   dog.i('info');
