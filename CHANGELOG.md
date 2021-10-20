@@ -1,3 +1,9 @@
+## [1.4.0] - 2021/10/20
+
+* Null safety.
+* Upgrade to emoji 14.
+* API opt.
+
 ## [1.3.2] - 2021/05/20
 
 * Add constructor parameter `supportsAnsiColor` for `ConsoleEmitter`.
