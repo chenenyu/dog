@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'formatter.dart';
-import 'level.dart';
+import 'package:dog/src/formatter.dart';
+import 'package:dog/src/level.dart';
 
 /// Log record.
 class Record {

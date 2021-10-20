@@ -1,4 +1,3 @@
-import 'package:dog/src/dispatcher.dart';
 import 'package:dog/src/emitter/console_emitter.dart';
 import 'package:dog/src/formatter/pretty_formatter.dart';
 import 'package:dog/src/handler.dart';
@@ -16,13 +15,13 @@ Dog dog = Dog(
 /// [stackTrace] Optional. StackTrace shows below [message].
 class Dog {
   /// Specify [level] to [Level.off] to disable all output.
-  static Level level = Level.all;
+  Level level = Level.all;
 
-  final Dispatcher _dispatcher = Dispatcher();
+  final Set<Handler> _handlers = {};
 
   Dog({Handler? handler}) {
     if (handler != null) {
-      _dispatcher.registerHandler(handler);
+      _handlers.add(handler);
     }
   }
 
@@ -60,23 +59,28 @@ class Dog {
     String? title,
     StackTrace? stackTrace,
   }) {
-    if (level < Dog.level) {
+    if (level < this.level) {
       return;
     }
     Record record =
         Record(level, message, DateTime.now(), tag, title, stackTrace);
-    _dispatcher.add(record);
+    for (Handler handler in _handlers) {
+      handler.handle(record);
+    }
   }
 
   void registerHandler(Handler handler) {
-    _dispatcher.registerHandler(handler);
+    _handlers.add(handler);
   }
 
   void unregisterHandler(Handler handler) {
-    _dispatcher.unregisterHandler(handler);
+    _handlers.remove(handler);
   }
 
   void destroy() {
-    _dispatcher.destroy();
+    for (Handler handler in _handlers) {
+      handler.destroy();
+    }
+    _handlers.clear();
   }
 }

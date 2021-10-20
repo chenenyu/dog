@@ -68,7 +68,7 @@ Web platform support:
 See [Level](lib/src/level.dart).
 ```dart
 // disable Dog
-Dog.level = Level.OFF;
+dog.level = Level.OFF;
 ```
 
 #### Formatter

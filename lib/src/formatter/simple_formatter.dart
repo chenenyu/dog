@@ -23,8 +23,8 @@ class SimpleFormatter extends Formatter {
     List<String> lines = [];
     // tag/level time caller
     String? caller = callerGetter?.call().toString();
-    lines.add('${record.tag ?? record.level.name}'
-        ' ${record.dateTime.toIso8601String()}'
+    lines.add('${record.dateTime.toIso8601String()}'
+        ' ${record.tag ?? record.level.name}'
         '${caller == null ? '' : (' (' + caller + ')')}');
     // title
     if (record.title != null) {

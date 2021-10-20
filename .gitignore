@@ -30,5 +30,6 @@
 .pub/
 build/
 
+pubspec.lock
 log.txt
 tool/*.txt

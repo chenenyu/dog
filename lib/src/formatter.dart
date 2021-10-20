@@ -1,4 +1,4 @@
-import 'record.dart';
+import 'package:dog/src/record.dart';
 
 /// Format log message.
 abstract class Formatter {
