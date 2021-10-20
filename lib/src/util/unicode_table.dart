@@ -1,17 +1,17 @@
-// Generated on 2021-10-19 09:26:46.938756Z
+// Generated on 2021-10-20 06:59:36.327003Z
 part of dog.util;
 
-List<Tuple2> _ascii_table = [
+List<Tuple2> _asciiTable = [
   Tuple2(0x20, 0x7E),
 ];
 
-List<Tuple2> _private_table = [
+List<Tuple2> _privateTable = [
   Tuple2(0xE000, 0xF8FF),
   Tuple2(0xF0000, 0xFFFFD),
   Tuple2(0x100000, 0x10FFFD),
 ];
 
-List<Tuple2> _nonprint_table = [
+List<Tuple2> _nonprintTable = [
   Tuple2(0x0, 0x1F),
   Tuple2(0x7F, 0x9F),
   Tuple2(0xAD, 0xAD),
@@ -38,7 +38,7 @@ List<Tuple2> _nonprint_table = [
   Tuple2(0xE0020, 0xE007F),
 ];
 
-List<Tuple2> _combining_table = [
+List<Tuple2> _combiningTable = [
   Tuple2(0x300, 0x36F),
   Tuple2(0x483, 0x489),
   Tuple2(0x591, 0x5BD),
@@ -340,7 +340,7 @@ List<Tuple2> _combining_table = [
   Tuple2(0xE0100, 0xE01EF),
 ];
 
-List<Tuple2> _doublewide_table = [
+List<Tuple2> _doublewideTable = [
   Tuple2(0x1100, 0x115F),
   Tuple2(0x231A, 0x231B),
   Tuple2(0x2329, 0x232A),
@@ -465,7 +465,7 @@ List<Tuple2> _doublewide_table = [
   Tuple2(0x30000, 0x3FFFD),
 ];
 
-List<Tuple2> _unassigned_table = [
+List<Tuple2> _unassignedTable = [
   Tuple2(0x378, 0x379),
   Tuple2(0x380, 0x383),
   Tuple2(0x38B, 0x38B),
@@ -1177,7 +1177,7 @@ List<Tuple2> _unassigned_table = [
   Tuple2(0x10FFFE, 0x10FFFF),
 ];
 
-List<Tuple2> _ambiguous_table = [
+List<Tuple2> _ambiguousTable = [
   Tuple2(0xA1, 0xA1),
   Tuple2(0xA4, 0xA4),
   Tuple2(0xA7, 0xA8),
@@ -1359,7 +1359,7 @@ List<Tuple2> _ambiguous_table = [
   Tuple2(0x100000, 0x10FFFD),
 ];
 
-List<Tuple2> _widened_table = [
+List<Tuple2> _widenedTable = [
   Tuple2(0x1F57A, 0x1F57A),
   Tuple2(0x1F5A4, 0x1F5A4),
   Tuple2(0x1F6D1, 0x1F6D2),

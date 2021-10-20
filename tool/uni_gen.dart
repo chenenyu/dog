@@ -10,35 +10,35 @@ import 'package:tuple/tuple.dart';
   https://www.compart.com/en/unicode/
  */
 
-const String UNICODE_DATA_URL =
+const String unicodeDataUrl =
     'http://ftp.unicode.org/Public/UNIDATA/UnicodeData.txt';
-const String EAST_ASIAN_WIDTH_URL =
+const String eastAsianWidthUrl =
     'http://ftp.unicode.org/Public/UNIDATA/EastAsianWidth.txt';
-const String EMOJI_DATA_URL =
+const String emojiDataUrl =
     'https://unicode.org/Public/14.0.0/ucd/emoji/emoji-data.txt';
 
 // Maximum codepoint value.
-const int MAX_CODEPOINT = 0x110000;
+const int maxCodepoint = 0x110000;
 
-const int FIELD_CODEPOINT = 0;
-const int FIELD_NAME = 1;
-const int FIELD_CATEGORY = 2;
+const int fieldCodepoint = 0;
+const int fieldName = 1;
+const int fieldCategory = 2;
 
 // Category for unassigned codepoints.
-const String CAT_UNASSIGNED = "Cn";
+const String catUnassigned = "Cn";
 // Category for private use codepoints.
-const String CAT_PRIVATE_USE = "Co";
+const String catPrivateUse = "Co";
 // Category for surrogates.
-const String CAT_SURROGATE = "Cs";
+const String catSurrogate = "Cs";
 
 // Ambiguous East Asian characters
-const int WIDTH_AMBIGUOUS_EASTASIAN = -3;
+const int widthAmbiguousEastasian = -3;
 // Width changed from 1 to 2 in Unicode 9.0
-const int WIDTH_WIDENED_IN_9 = -6;
+const int widthWidenedIn9 = -6;
 
 class CodePoint {
   final int codepoint;
-  String category = CAT_UNASSIGNED;
+  String category = catUnassigned;
   int? width;
 
   CodePoint(this.codepoint);
@@ -53,27 +53,27 @@ class CodePoint {
 
 void main(List<String> args) async {
   List result = await Future.wait([
-    _read_datafile(UNICODE_DATA_URL),
-    _read_datafile(EAST_ASIAN_WIDTH_URL),
-    _read_datafile(EMOJI_DATA_URL),
+    _readDatafile(unicodeDataUrl),
+    _readDatafile(eastAsianWidthUrl),
+    _readDatafile(emojiDataUrl),
   ]);
-  List<String> unicode_data = result[0];
-  List<String> east_asian_width = result[1];
-  List<String> emoji_data = result[2];
+  List<String> unicodeData = result[0];
+  List<String> eastAsianWidth = result[1];
+  List<String> emojiData = result[2];
 
   print('${DateTime.now().toString()}: Parsing...');
   final List<CodePoint> cps =
-      List.generate(MAX_CODEPOINT, (index) => CodePoint(index));
-  _set_general_categories(unicode_data, cps);
-  _set_east_asian_width(east_asian_width, cps);
-  _set_emoji_data(emoji_data, cps);
-  _set_hardcoded_ranges(cps);
+      List.generate(maxCodepoint, (index) => CodePoint(index));
+  _setGeneralCategories(unicodeData, cps);
+  _setEastAsianWidth(eastAsianWidth, cps);
+  _setEmojiData(emojiData, cps);
+  _setHardcodedRanges(cps);
 
   _gen(cps);
 }
 
 /// Read data from file. Download first if file not exists.
-Future<List<String>> _read_datafile(String url) async {
+Future<List<String>> _readDatafile(String url) async {
   String name = url.substring(url.lastIndexOf('/') + 1);
   File file = File(p.join(p.dirname(Platform.script.path), name));
   if (!file.existsSync()) {
@@ -88,14 +88,13 @@ Future<List<String>> _read_datafile(String url) async {
 }
 
 /// Read from UnicodeData.txt, and set general categories for codepoints.
-void _set_general_categories(
-    List<String> unicode_data_lines, List<CodePoint> cps) {
-  for (String line in unicode_data_lines) {
+void _setGeneralCategories(List<String> unicodeDataLines, List<CodePoint> cps) {
+  for (String line in unicodeDataLines) {
     var fields = line.split(';');
-    if (fields.length > FIELD_CATEGORY) {
-      List<int> range = _hexrange_to_range(fields[FIELD_CODEPOINT]);
+    if (fields.length > fieldCategory) {
+      List<int> range = _hexrangeToRange(fields[fieldCodepoint]);
       for (int cp in range) {
-        cps[cp].category = fields[FIELD_CATEGORY];
+        cps[cp].category = fields[fieldCategory];
       }
     }
   }
@@ -109,31 +108,30 @@ void _set_general_categories(
 /// W: Wide 2
 /// Na: Narrow
 /// N: Neutral
-void _set_east_asian_width(
-    List<String> east_asian_width_lines, List<CodePoint> cps) {
-  void parse_line(String line) {
+void _setEastAsianWidth(List<String> eastAsianWidthLines, List<CodePoint> cps) {
+  void parseLine(String line) {
     line = line.split('#').first;
     List<String> fields = line.trim().split(';');
     if (fields.length != 2) {
       return;
     }
     int width = 1;
-    String width_type = fields.last;
-    if (width_type == 'A') {
-      width = WIDTH_AMBIGUOUS_EASTASIAN; // ambiguous
-    } else if (width_type == 'F' || width_type == 'W') {
+    String widthType = fields.last;
+    if (widthType == 'A') {
+      width = widthAmbiguousEastasian; // ambiguous
+    } else if (widthType == 'F' || widthType == 'W') {
       width = 2;
     } else {
       width = 1;
     }
-    List<int> ranges = _hexrange_to_range(fields.first);
+    List<int> ranges = _hexrangeToRange(fields.first);
     for (int cp in ranges) {
       cps[cp].width = width;
     }
   }
 
-  for (String line in east_asian_width_lines) {
-    parse_line(line);
+  for (String line in eastAsianWidthLines) {
+    parseLine(line);
   }
 
   /*
@@ -148,40 +146,40 @@ void _set_east_asian_width(
   #         Plane 2:                            U+20000..U+2FFFD
   #         Plane 3:                            U+30000..U+3FFFD
    */
-  void handle_wide_ranges(List<int> wide_ranges) {
-    for (int cp in wide_ranges) {
+  void handleWideRanges(List<int> wideRanges) {
+    for (int cp in wideRanges) {
       cps[cp].width ??= 2;
     }
   }
 
-  handle_wide_ranges(_hexrange_to_range('3400..4DBF'));
-  handle_wide_ranges(_hexrange_to_range('4E00..9FFF'));
-  handle_wide_ranges(_hexrange_to_range('F900..FAFF'));
-  handle_wide_ranges(_hexrange_to_range('20000..2FFFD'));
-  handle_wide_ranges(_hexrange_to_range('30000..3FFFD'));
+  handleWideRanges(_hexrangeToRange('3400..4DBF'));
+  handleWideRanges(_hexrangeToRange('4E00..9FFF'));
+  handleWideRanges(_hexrangeToRange('F900..FAFF'));
+  handleWideRanges(_hexrangeToRange('20000..2FFFD'));
+  handleWideRanges(_hexrangeToRange('30000..3FFFD'));
 }
 
 /// Read from emoji-data.txt, set codepoint widths
-void _set_emoji_data(List<String> emoji_data_lines, List<CodePoint> cps) {
+void _setEmojiData(List<String> emojiDataLines, List<CodePoint> cps) {
   RegExp reg = RegExp(r'E(\d+\.\d+)\s*');
-  Iterable<Tuple2> parse_emoji_line(String line) {
-    List<String> fields_comments = line.split('#');
-    assert(fields_comments.length >= 2);
-    String fields = fields_comments[0];
-    String comments = fields_comments[1].trim();
-    List<String> cp_prop = fields.split(';');
-    assert(cp_prop.length == 2, '${cp_prop}.length != 2');
-    String cp_range = cp_prop.first.trim();
+  Iterable<Tuple2> parseEmojiLine(String line) {
+    List<String> fieldsComments = line.split('#');
+    assert(fieldsComments.length >= 2);
+    String fields = fieldsComments[0];
+    String comments = fieldsComments[1].trim();
+    List<String> cpProp = fields.split(';');
+    assert(cpProp.length == 2, '$cpProp.length != 2');
+    String cpRange = cpProp.first.trim();
     double version = 0;
     RegExpMatch? match = reg.firstMatch(comments);
     assert(match != null);
     version = double.parse(match![1]!);
-    List<int> range = _hexrange_to_range(cp_range);
+    List<int> range = _hexrangeToRange(cpRange);
     return range.map((e) => Tuple2<int, double>(e, version));
   }
 
-  for (String line in emoji_data_lines) {
-    Iterable<Tuple2> tuples = parse_emoji_line(line);
+  for (String line in emojiDataLines) {
+    Iterable<Tuple2> tuples = parseEmojiLine(line);
     for (Tuple2 tuple in tuples) {
       // Don't consider <=1F000 values as emoji.
       if (tuple.item1 < 0x1F000) continue;
@@ -196,30 +194,29 @@ void _set_emoji_data(List<String> emoji_data_lines, List<CodePoint> cps) {
       if (tuple.item2 >= 9.0) {
         cps[tuple.item1].width = 2;
       } else {
-        cps[tuple.item1].width =
-            WIDTH_WIDENED_IN_9; // maybe 1, renderer dependent
+        cps[tuple.item1].width = widthWidenedIn9; // maybe 1, renderer dependent
       }
     }
   }
 }
 
 /// Can be determined awkwardly from UnicodeData.txt
-void _set_hardcoded_ranges(List<CodePoint> cps) {
+void _setHardcodedRanges(List<CodePoint> cps) {
   // E000;<Private Use, First>;Co;0;L;;;;;N;;;;;
   // F8FF;<Private Use, Last>;Co;0;L;;;;;N;;;;;
   // F0000;<Plane 15 Private Use, First>;Co;0;L;;;;;N;;;;;
   // FFFFD;<Plane 15 Private Use, Last>;Co;0;L;;;;;N;;;;;
   // 100000;<Plane 16 Private Use, First>;Co;0;L;;;;;N;;;;;
   // 10FFFD;<Plane 16 Private Use, Last>;Co;0;L;;;;;N;;;;;
-  List<Tuple2<int, int>> private_ranges = [
+  List<Tuple2<int, int>> privateRanges = [
     Tuple2(0xE000, 0xF8FF),
     Tuple2(0xF0000, 0xFFFFD),
     Tuple2(0x100000, 0x10FFFD),
   ];
-  for (Tuple2<int, int> tuple in private_ranges) {
-    List<int> range = _tuple_to_range(tuple);
+  for (Tuple2<int, int> tuple in privateRanges) {
+    List<int> range = _tupleToRange(tuple);
     for (int cp in range) {
-      cps[cp].category = CAT_PRIVATE_USE;
+      cps[cp].category = catPrivateUse;
     }
   }
 
@@ -229,14 +226,14 @@ void _set_hardcoded_ranges(List<CodePoint> cps) {
   // DBFF;<Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
   // DC00;<Low Surrogate, First>;Cs;0;L;;;;;N;;;;;
   // DFFF;<Low Surrogate, Last>;Cs;0;L;;;;;N;;;;;
-  List<Tuple2<int, int>> surrogate_ranges = [
+  List<Tuple2<int, int>> surrogateRanges = [
     Tuple2(0xD800, 0xDBFF),
     Tuple2(0xDC00, 0xDFFF),
   ];
-  for (Tuple2<int, int> tuple in surrogate_ranges) {
-    List<int> range = _tuple_to_range(tuple);
+  for (Tuple2<int, int> tuple in surrogateRanges) {
+    List<int> range = _tupleToRange(tuple);
     for (int cp in range) {
-      cps[cp].category = CAT_SURROGATE;
+      cps[cp].category = catSurrogate;
     }
   }
 }
@@ -244,7 +241,7 @@ void _set_hardcoded_ranges(List<CodePoint> cps) {
 /// Given a string like 1F300..1F320 representing an inclusive range,
 /// return the range of codepoints.
 /// If the string is like 1F321, return a range of just that element.
-List<int> _hexrange_to_range(String hexrange) {
+List<int> _hexrangeToRange(String hexrange) {
   List<int> ranges =
       hexrange.split('..').map((e) => int.parse(e, radix: 16)).toList();
   assert(ranges.length <= 2);
@@ -255,19 +252,19 @@ List<int> _hexrange_to_range(String hexrange) {
   }
 }
 
-List<int> _tuple_to_range(Tuple2<int, int> tuple) {
+List<int> _tupleToRange(Tuple2<int, int> tuple) {
   return [for (int i = tuple.item1; i <= tuple.item2; i++) i];
 }
 
-List<Tuple2<CodePoint, CodePoint>> _merge_codepoints_to_tuples(
+List<Tuple2<CodePoint, CodePoint>> _mergeCodepointsToTuples(
     List<CodePoint> cps) {
   if (cps.isEmpty) return [];
   cps.sort((a, b) => a.codepoint.compareTo(b.codepoint));
   List<Tuple2<CodePoint, CodePoint>> tuples = [Tuple2(cps[0], cps[0])];
   for (CodePoint cp in cps.sublist(1)) {
-    Tuple2<CodePoint, CodePoint> last_tuple = tuples.last;
-    if (cp.codepoint == last_tuple.item2.codepoint + 1) {
-      tuples[tuples.length - 1] = last_tuple.withItem2(cp);
+    Tuple2<CodePoint, CodePoint> lastTuple = tuples.last;
+    if (cp.codepoint == lastTuple.item2.codepoint + 1) {
+      tuples[tuples.length - 1] = lastTuple.withItem2(cp);
       continue;
     }
     tuples.add(Tuple2<CodePoint, CodePoint>(cp, cp));
@@ -275,8 +272,8 @@ List<Tuple2<CodePoint, CodePoint>> _merge_codepoints_to_tuples(
   return tuples;
 }
 
-String _codepoints_to_tuple_str(List<CodePoint> cps) {
-  List<Tuple2<CodePoint, CodePoint>> tuples = _merge_codepoints_to_tuples(cps);
+String _codepointsToTupleStr(List<CodePoint> cps) {
+  List<Tuple2<CodePoint, CodePoint>> tuples = _mergeCodepointsToTuples(cps);
   return tuples
       .map((e) => 'Tuple2(${e.item1.hex}, ${e.item2.hex}),')
       .join('\n  ');
@@ -285,8 +282,8 @@ String _codepoints_to_tuple_str(List<CodePoint> cps) {
 void _gen(List<CodePoint> cps) {
   print('${DateTime.now().toString()}: Generating...');
 
-  String ascii_codepoints() {
-    return _codepoints_to_tuple_str([
+  String asciiCodepoints() {
+    return _codepointsToTupleStr([
       for (CodePoint cp in cps)
         if (cp.codepoint >= 0x20 && cp.codepoint < 0x7F) cp
     ]);
@@ -297,57 +294,57 @@ void _gen(List<CodePoint> cps) {
       for (CodePoint cp in cps)
         if (cats.contains(cp.category)) cp
     ];
-    return _codepoints_to_tuple_str(matches);
+    return _codepointsToTupleStr(matches);
   }
 
-  String codepoints_with_width(int width) {
+  String codepointsWithWidth(int width) {
     List<CodePoint> matches = [
       for (CodePoint cp in cps)
         if (cp.width == width) cp
     ];
-    return _codepoints_to_tuple_str(matches);
+    return _codepointsToTupleStr(matches);
   }
 
   String template = '''
 // Generated on ${DateTime.now().toUtc().toString()}
 part of dog.util;
 
-List<Tuple2> _ascii_table = [
-  ${ascii_codepoints()}
+List<Tuple2> _asciiTable = [
+  ${asciiCodepoints()}
 ];
 
-List<Tuple2> _private_table = [
-  ${categories([CAT_PRIVATE_USE])}
+List<Tuple2> _privateTable = [
+  ${categories([catPrivateUse])}
 ];
 
-List<Tuple2> _nonprint_table = [
-  ${categories(['Cc', 'Cf', 'Zl', 'Zp', CAT_SURROGATE])}
+List<Tuple2> _nonprintTable = [
+  ${categories(['Cc', 'Cf', 'Zl', 'Zp', catSurrogate])}
 ];
 
-List<Tuple2> _combining_table = [
+List<Tuple2> _combiningTable = [
   ${categories(["Mn", "Mc", "Me"])}
 ];
 
-List<Tuple2> _doublewide_table = [
-  ${codepoints_with_width(2)}
+List<Tuple2> _doublewideTable = [
+  ${codepointsWithWidth(2)}
 ];
 
-List<Tuple2> _unassigned_table = [
-  ${categories([CAT_UNASSIGNED])}
+List<Tuple2> _unassignedTable = [
+  ${categories([catUnassigned])}
 ];
 
-List<Tuple2> _ambiguous_table = [
-  ${codepoints_with_width(WIDTH_AMBIGUOUS_EASTASIAN)}
+List<Tuple2> _ambiguousTable = [
+  ${codepointsWithWidth(widthAmbiguousEastasian)}
 ];
 
-List<Tuple2> _widened_table = [
-  ${codepoints_with_width(WIDTH_WIDENED_IN_9)}
+List<Tuple2> _widenedTable = [
+  ${codepointsWithWidth(widthWidenedIn9)}
 ];
 ''';
 
-  File table_file = File(p.normalize(p.join(p.dirname(Platform.script.path),
+  File tableFile = File(p.normalize(p.join(p.dirname(Platform.script.path),
       '../', 'lib/src/util/unicode_table.dart')));
-  table_file.writeAsStringSync(template);
+  tableFile.writeAsStringSync(template);
 
-  print('${DateTime.now().toString()}: Generated to ${table_file.path}');
+  print('${DateTime.now().toString()}: Generated to ${tableFile.path}');
 }
